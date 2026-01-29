@@ -1,0 +1,27 @@
+organization_slug: maxime
+base_project_slug: lesroueslibres
+main_user: lesroueslibres
+main_user_uid: 10001 # TODO must be unique for each project on the server
+frontend_repo: git@github.com:maxbellec/lesroueslibres.git
+is_mono_repo: false
+backend_identity_file_path: /home/{{ main_user }}/.ssh/id_ed25519_backend
+frontend_identity_file_path: "{{ backend_identity_file_path if is_mono_repo else '/home/{{ main_user }}/.ssh/id_ed25519_frontend' }}"
+var_log_path: /var/log/{{ organization_slug }}/{{ project_slug }}
+project_base_dir: /{{ organization_slug }}/{{ base_project_slug }}
+supervisor_conf: /etc/supervisor/conf.d
+
+requests_timeout: 30
+# if using postgresql database, you will need to
+# - define the var `database_password`
+# - install an additional Ansible module `ansible-galaxy collection install community.postgresql`
+database_provider: postgresql # sqlite or postgresql
+backend_is_django: true
+
+# can be SSR or static
+frontend_mode: static
+build_command: build # usually `build-only` for a static vue project
+
+has_backend: false
+
+maintenance_page: "maintenance.html"
+# maintenance_logo_source: "/chemin/local/vers/logo.png" # Chemin du logo sur le frontend_static (Optionnel)

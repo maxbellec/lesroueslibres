@@ -1,0 +1,24 @@
+---
+- name: Deploy vuejs frontend on all hosts
+  hosts: all
+  vars:
+    frontend_dir: "{{ project_dir }}/front/front"
+  handlers:
+    - import_tasks: telescoop-deploy/handlers/nginx.yml
+  tasks:
+    - import_tasks: telescoop-deploy/tasks/create-https-certificate.yml
+    - import_tasks: telescoop-deploy/tasks/setup-user-and-directories.yml
+    - import_tasks: telescoop-deploy/tasks/setup-and-clone-git.yml
+      vars:
+        clone_path: "{{ frontend_dir }}/.."
+        repo: "{{ backend_repo }}"
+        branch: "{{ frontend_branch }}"
+        git_track_submodules: false
+        identity_file_path: "{{ backend_identity_file_path }}"
+      when: has_backend | default(true)
+    - import_tasks: telescoop-deploy/tasks/setup-nginx.yml
+      vars:
+        static_path: "{{ frontend_path }}/site"
+        use_password: false
+        nginx_conf_filename: "{{ project_slug }}"
+        server_uris_passed_to_backend:
