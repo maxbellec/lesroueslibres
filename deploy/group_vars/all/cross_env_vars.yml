@@ -1,6 +1,6 @@
 ---
 
-support_mail_addr: contact@{{ organization_slug }}.fr
+support_mail_addr: maxbellec@gmail.com
 
 sshd:
-  port: 42722
+  port: 22
